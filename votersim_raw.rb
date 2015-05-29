@@ -9,14 +9,12 @@ class Person
   end
 
   def select_option
+    puts "in select_option"
     option = ""
-    while option == ""
+    until option == "quit"
       print "Please select create, list, update, vote, or quit: "
       option = gets.chomp.downcase
-      if option == "quit"
-        puts "Thank you.  Exiting program"
-        exit
-      end
+      puts "option is #{option}"
       case option
       when "create"
         create_option
@@ -26,14 +24,16 @@ class Person
         update_option
       when "vote"
         vote_option
+      when "quit"
+        puts "Thank you.  Exiting program"
       else
-        option = ""
         puts "Invalid option selected."
       end
     end
   end
 
   def create_option
+    puts "in create_option"
     puts "CREATE voter or politician:"
     create_option = ""
     until create_option == "quit"
@@ -53,25 +53,18 @@ class Person
   end
 
   def list_option
-    puts "LIST voters and politicians:"
-    if @@voters.count >= 1
-      @@voters.each do |voter|
-        puts "* Voter, #{voter.voter_name }, #{voter.politics}"
-      end
-    else
-      puts "There are no voters to list"
+    puts "in list_option"
+    puts "List"
+    @@politicians.each do |politician|
+      puts "* Politician, #{politician.politician_name}, #{politician.party}"
     end
-    if @@politicians.count >= 1
-      @@politicians.each do |politician|
-        puts "* Politician, #{politician.politician_name}, #{politician.party}"
-      end
-    else
-      puts "There are no politicians to list"
+    @@voters.each do |voter|
+      puts "* Voter, #{voter.voter_name }, #{voter.politics}"
     end
-    select_option
   end
 
   def update_option
+    puts "in update_option"
     puts "UPDATE voter or politician: "
     update_option = ""
     until update_option == "quit"
@@ -89,51 +82,12 @@ class Person
       end
     end
   end
-
   def vote_option
-    puts "VOTING:"
-    @dem_count = 0
-    @rep_count = 0
-    @@voters.each do | voter |
-      @@politicians.each do | pol |
-        case pol.party
-        when "democrat"
-          case voter.politics
-          when "socialist", "liberal", "neutral"
-            @dem_count += 1
-          end
-        when "republican"
-          case voter_politics
-          when "tea party", "conservative"
-            @rep_count += 1
-          end
-        end
-      end
-    end
-
-    @@politicians.each do |pol|
-      if pol.party = "democrat"
-        @dem_cand = pol.politician_name
-      else
-        @rep_cand = pol.politician_name
-      end
-    end
-    puts "dem count = #{@dem_count}"
-    puts "rep count = #{@rep_count}"
-
-    puts "Voting Results:"
-    puts "#{@dem_count} votes for the Democrat, #{@dem_cand}"
-    puts "#{@rep_count} votes for the Republican, #{@rep_cand}"
-    if @dem_count > @rep_count
-      puts "The winner is #{@dem_cand}!"
-    else
-      puts "The winner is #{@rep_cand}!"
-    end
-    select_option
+    puts "in vote_option"
   end
-
   def create_voter
-    puts "CREATE new_voter:"
+    puts "in create_voter"
+    puts "Create new_voter:"
     print "Name? "
     name = gets.chomp
     politics = ""
@@ -149,16 +103,17 @@ class Person
     end
     new_voter = Voter.new(name, politics)
     @@voters << new_voter
-    puts "Voter #{new_voter.voter_name}, #{new_voter.politics}, has been created"
+    p "instantiated voter #{new_voter.voter_name} as a #{new_voter.politics}"
+    p "voters array now: #{@@voters}"
   end
-
   def update_voter
-    puts "UPDATE voter:"
+    puts "in update_voter"
+    puts "Update voter:"
     print "Voter name? "
     name = gets.chomp
     politics = ""
     until politics != ""
-      print "Politics?  Liberal, Conservative, Tea party, Socialist, or Neutral: "
+      print "Politics?  Liberal, Conservative, Tea politics, Socialist, or Neutral: "
       politics_entry = gets.chomp.downcase
       case politics_entry
       when "liberal", "conservative", "tea party", "socialist", "neutral"
@@ -179,7 +134,6 @@ class Person
       puts "no match found"
     end
   end
-
   def create_politician
     puts "in create_politician"
     puts "Create new_politician:"
@@ -187,7 +141,7 @@ class Person
     name = gets.chomp
     party = ""
     until party != ""
-      print "Party?  Democrat or Republican: "
+      print "Party?  Democrate or Republican: "
       party_entry = gets.chomp.downcase
       case party_entry
       when "democrat", "republican"
@@ -198,18 +152,19 @@ class Person
     end
     new_politician = Politician.new(name, party)
     @@politicians << new_politician
-    puts "Politician #{new_politician.politician_name}, #{new_politician.party}, has been created"
+    p "instantiated politician #{new_politician.politician_name} as a #{new_politician.party}"
+    p "politicians array now: #{@@politicians}"
   end
-
   def update_politician
     puts "in update_politician"
     puts "Update politician:"
     print "Politician name? "
     name = gets.chomp
     party = ""
-    until party != ""
-      print "Party?  Democrat or Republican: "
+    until party_entry != ""
       party_entry = gets.chomp.downcase
+      print "Politician Party? "
+      party = gets.chomp.downcase
       case party_entry
       when "democrat", "republican"
         party = party_entry
@@ -218,19 +173,18 @@ class Person
       end
     end
     @found = false
-    @@politicians.each do |politician|
+    @@voters.each do |politician|
       if politician.politician_name == name
         @found = true
         update_politician = politician
-        update_politician.party = party
+        update_voter.party = party
       end
     end
-    if !@found
+    if @found == true
       puts "Politician #{name} not found"
     end
   end
 end
-
 class Voter < Person
   attr_accessor :voter_name, :politics
 
@@ -239,7 +193,6 @@ class Voter < Person
     @politics = politics
   end
 end
-
 class Politician < Person
   attr_accessor :politician_name, :party
 
@@ -252,7 +205,6 @@ end
 def test_voter_sim
   person = Person.new
   person.select_option
-  puts "returned to test_voter_sim"
 end
 
 test_voter_sim

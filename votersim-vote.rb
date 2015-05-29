@@ -92,43 +92,6 @@ class Person
 
   def vote_option
     puts "VOTING:"
-    @dem_count = 0
-    @rep_count = 0
-    @@voters.each do | voter |
-      @@politicians.each do | pol |
-        case pol.party
-        when "democrat"
-          case voter.politics
-          when "socialist", "liberal", "neutral"
-            @dem_count += 1
-          end
-        when "republican"
-          case voter_politics
-          when "tea party", "conservative"
-            @rep_count += 1
-          end
-        end
-      end
-    end
-
-    @@politicians.each do |pol|
-      if pol.party = "democrat"
-        @dem_cand = pol.politician_name
-      else
-        @rep_cand = pol.politician_name
-      end
-    end
-    puts "dem count = #{@dem_count}"
-    puts "rep count = #{@rep_count}"
-
-    puts "Voting Results:"
-    puts "#{@dem_count} votes for the Democrat, #{@dem_cand}"
-    puts "#{@rep_count} votes for the Republican, #{@rep_cand}"
-    if @dem_count > @rep_count
-      puts "The winner is #{@dem_cand}!"
-    else
-      puts "The winner is #{@rep_cand}!"
-    end
     select_option
   end
 
@@ -252,7 +215,6 @@ end
 def test_voter_sim
   person = Person.new
   person.select_option
-  puts "returned to test_voter_sim"
 end
 
 test_voter_sim
