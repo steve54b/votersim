@@ -11,24 +11,25 @@ class Person
   def select_option
     option = ""
     while option == ""
-      print "Please select create, list, update, vote, or quit: "
+      print "Please select (c)reate, (l)ist, (u)pdate, (v)ote, or (q)uit: "
       option = gets.chomp.downcase
-      if option == "quit"
+      if option == "q"
         puts "Thank you.  Exiting program"
         exit
-      end
-      case option
-      when "create"
-        create_option
-      when "list"
-        list_option
-      when "update"
-        update_option
-      when "vote"
-        vote_option
       else
-        option = ""
-        puts "Invalid option selected."
+        case option
+        when "c"
+          create_option
+        when "l"
+          list_option
+        when "u"
+          update_option
+        when "v"
+          vote_option
+        else
+          option = ""
+          puts "Invalid option selected."
+        end
       end
     end
   end
@@ -37,14 +38,14 @@ class Person
     puts "CREATE voter or politician:"
     create_option = ""
     until create_option == "quit"
-      print "Please select voter or politician (quit for main menu): "
+      print "Please select (v)oter or (p)olitician, or (q)uit for main menu: "
       create_option = gets.chomp
       case create_option
-      when "voter"
+      when "v"
         create_voter
-      when "politician"
+      when "p"
         create_politician
-      when "quit"
+      when "q"
         select_option
       else
         puts "Invalid option selected."
@@ -75,14 +76,14 @@ class Person
     puts "UPDATE voter or politician: "
     update_option = ""
     until update_option == "quit"
-      print "Please select voter or politician (quit for main menu): "
+      print "Please select (v)oter or (p)olitician, or (q)uit for main menu: "
       update_option = gets.chomp.downcase
       case update_option
-      when "voter"
+      when "v"
         update_voter
-      when "politician"
+      when "p"
         update_politician
-      when "quit"
+      when "q"
         select_option
       else
         puts "Invalid option selected."
@@ -103,7 +104,7 @@ class Person
             @dem_count += 1
           end
         when "republican"
-          case voter_politics
+          case voter.politics
           when "tea party", "conservative"
             @rep_count += 1
           end
@@ -111,31 +112,29 @@ class Person
       end
     end
 
-    @@politicians.each do |pol|
-      if pol.party = "democrat"
-        @dem_cand = pol.politician_name
-      else
-        @rep_cand = pol.politician_name
-      end
-    end
-    puts "dem count = #{@dem_count}"
-    puts "rep count = #{@rep_count}"
+    politician_republican_vote = 1
+    @rep_count += politician_republican_vote
+    politician_democratic_vote = 1
+    @dem_count += politician_democratic_vote
 
     puts "Voting Results:"
-    puts "#{@dem_count} votes for the Democrat, #{@dem_cand}"
-    puts "#{@rep_count} votes for the Republican, #{@rep_cand}"
+    puts "#{@dem_count} votes for the Democrat..."
+    puts "#{@rep_count} votes for the Republican..."
     if @dem_count > @rep_count
-      puts "The winner is #{@dem_cand}!"
+      puts "The democrat wins!!!!"
     else
-      puts "The winner is #{@rep_cand}!"
+      puts "The republican wins!!!!"
     end
     select_option
   end
 
   def create_voter
     puts "CREATE new_voter:"
-    print "Name? "
-    name = gets.chomp
+    name = ""
+    until name != ""
+      print "Voter name? "
+      name = gets.chomp
+    end
     politics = ""
     until politics != ""
       print "Politics?  Liberal, Conservative, Tea party, Socialist, or Neutral: "
@@ -154,8 +153,11 @@ class Person
 
   def update_voter
     puts "UPDATE voter:"
-    print "Voter name? "
-    name = gets.chomp
+    name = ""
+    until name != ""
+      print "Voter name? "
+      name = gets.chomp
+    end
     politics = ""
     until politics != ""
       print "Politics?  Liberal, Conservative, Tea party, Socialist, or Neutral: "
@@ -183,8 +185,11 @@ class Person
   def create_politician
     puts "in create_politician"
     puts "Create new_politician:"
-    print "Name? "
-    name = gets.chomp
+    name = ""
+    until name != ""
+      print "Politician name? "
+      name = gets.chomp
+    end
     party = ""
     until party != ""
       print "Party?  Democrat or Republican: "
